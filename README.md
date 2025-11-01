@@ -1,402 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jatin Gamer App</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        
-        .app-container {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 90%;
-            width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeIn 1.5s ease;
-        }
-        
-        .logo-container {
-            margin-bottom: 25px;
-        }
-        
-        .logo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .made-by {
-            font-size: 18px;
-            color: white;
-            margin-bottom: 5px;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-        
-        .name {
-            font-size: 24px;
-            color: #FFD700;
-            font-weight: bold;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            letter-spacing: 1px;
-        }
-        
-        .loading-container {
-            margin-top: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .loading-text {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #FFD700;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        
-        .manual-button {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            border-radius: 8px;
-            color: white;
-            padding: 8px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .manual-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .levels-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: cover;
-            background-position: center;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            overflow-y: auto;
-            z-index: 100;
-        }
-        
-        .levels-title {
-            font-size: 48px;
-            color: white;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            margin: 20px 0 30px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-align: center;
-        }
-        
-        .buttons-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            max-width: 800px;
-            width: 100%;
-            padding: 0 20px;
-        }
-        
-        .level-button {
-            background: linear-gradient(145deg, #6a11cb, #2575fc);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .level-button.unlocked:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(145deg, #2575fc, #6a11cb);
-        }
-        
-        .level-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        .level-button.locked {
-            background: linear-gradient(145deg, #444, #666);
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        
-        .lock-icon {
-            font-size: 24px;
-        }
-        
-        .level-complete-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-            color: white;
-            text-align: center;
-        }
-        
-        .complete-title {
-            font-size: 48px;
-            color: #FFD700;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        .complete-message {
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
-        
-        .continue-button {
-            background: linear-gradient(145deg, #6a11cb, #2575fc);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 15px 30px;
-            cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .continue-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            .buttons-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .levels-title {
-                font-size: 36px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .app-container {
-                padding: 30px 20px;
-            }
-            
-            .logo {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .name {
-                font-size: 20px;
-            }
-            
-            .made-by {
-                font-size: 16px;
-            }
-            
-            .buttons-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .level-button {
-                height: 50px;
-                font-size: 18px;
-            }
-            
-            .levels-title {
-                font-size: 32px;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Offline Activation App</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--txt:#e6eef8;--muted:#9fb0c8}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:var(--txt);background:linear-gradient(180deg,#071026 0%, #052036 100%);}
+    .center{display:flex;align-items:center;justify-content:center;height:100vh}
+    .card{background:var(--card);padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,.6);width:360px;max-width:92%;text-align:center}
+    h1{margin:0 0 8px;font-size:20px}
+    p{margin:0 0 18px;color:var(--muted)}
+    .row{display:flex;gap:8px;justify-content:center}
+    button{background:#1f6feb;border:none;color:white;padding:10px 14px;border-radius:8px;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,.08)}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:var(--txt);margin-bottom:10px}
+    .top-left{position:fixed;left:14px;top:12px}
+    .info-btn{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer}
+    .small{font-size:13px;color:var(--muted)}
+    .hidden{display:none}
+    .notice{padding:8px;border-radius:8px;background:rgba(255,255,255,.03);margin-bottom:10px}
+    .ok{color:#8ef29a}
+    .bad{color:#ff8b8b}
+    footer{margin-top:12px;font-size:12px;color:var(--muted)}
+  </style>
 </head>
 <body>
-    <div class="app-container" id="appContainer">
-        <div class="logo-container">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbLZw-MSjxlZwgpehamid6kPvR-zDXp_nLC0oRHBDERe1S-IsLODtn88LA&s=10" 
-                 alt="App Logo" class="logo">
-        </div>
-        <div class="text-container">
-            <div class="made-by">MADE BY</div>
-            <div class="name">JATIN GAMER Y4</div>
-        </div>
-        <div class="loading-container">
-            <div class="loading-text">Loading App...</div>
-            <div class="spinner"></div>
-            <button class="manual-button" id="manualButton">Click if stuck on loading</button>
-        </div>
-    </div>
-    
-    <div class="levels-screen" id="levelsScreen">
-        <h1 class="levels-title">LEVELS</h1>
-        <div class="buttons-container" id="buttonsContainer">
-            <!-- Buttons will be generated by JavaScript -->
-        </div>
-    </div>
-    
-    <div class="level-complete-screen" id="levelCompleteScreen">
-        <h2 class="complete-title">LEVEL COMPLETED!</h2>
-        <p class="complete-message" id="completeMessage">Congratulations! You've completed level 1.</p>
-        <button class="continue-button" id="continueButton">Continue</button>
-    </div>
+  <div class="top-left">
+    <div class="info-btn" id="infoBtn">i</div>
+  </div>  <div class="center" id="root">
+    <div class="card" id="authCard">
+      <h1>Welcome</h1>
+      <p class="small">Sign up or Login to continue (all data saved locally).</p>
+      <div class="row" style="margin-bottom:12px">
+        <button id="btnSignup">Sign Up</button>
+        <button class="ghost" id="btnLogin">Login</button>
+      </div>
+      <div id="message" class="small"></div>
+      <footer>Offline only -- data stored on this device.</footer>
+    </div><div class="card hidden" id="signupCard">
+  <h1>Create Account</h1>
+  <p class="small">Enter your name and a valid email to create an account.</p>
+  <div id="signupMsg" class="small"></div>
+  <input type="text" id="su_name" placeholder="Your name" />
+  <input type="email" id="su_email" placeholder="Email address" />
+  <div class="row">
+    <button id="createBtn">Create ID</button>
+    <button class="ghost" id="su_back">Back</button>
+  </div>
+</div>
 
-    <script>
-        // Simple player progress with fallback
-        let playerProgress = { highestLevel: 1 };
-        
-        // Try to load from localStorage, but don't break if it fails
-        try {
-            const savedProgress = localStorage.getItem('jatinGamerProgress');
-            if (savedProgress) {
-                playerProgress = JSON.parse(savedProgress);
-            }
-        } catch (e) {
-            // If localStorage fails, use default progress
-            console.log("Using default progress");
-        }
-        
-        // Set up manual transition button
-        document.getElementById('manualButton').addEventListener('click', function() {
-            transitionToLevels();
-        });
-        
-        // Auto transition after 5-8 seconds
-        const randomTime = Math.floor(Math.random() * 3000) + 5000;
-        setTimeout(transitionToLevels, randomTime);
-        
-        function transitionToLevels() {
-            const appContainer = document.getElementById('appContainer');
-            const levelsScreen = document.getElementById('levelsScreen');
-            
-            // Fade out the loading screen
-            appContainer.style.opacity = '0';
-            
-            // Show levels screen after fade out
-            setTimeout(function() {
-                appContainer.style.display = 'none';
-                levelsScreen.style.display = 'flex';
-                createLevelButtons();
-            }, 1000);
-        }
-        
-        function createLevelButtons() {
-            const buttonsContainer = document.getElementById('buttonsContainer');
-            buttonsContainer.innerHTML = '';
-            
-            for (let i = 1; i <= 50; i++) {
-                const button = document.createElement('button');
-                button.className = 'level-button';
-                
-                if (i <= playerProgress.highestLevel) {
-                    // Unlocked level
-                    button.classList.add('unlocked');
-                    button.textContent = i;
-                    button.addEventListener('click', function() {
-                        startLevel(i);
-                    });
-                } else {
-                    // Locked level
-                    button.classList.add('locked');
-                    button.innerHTML = '<span class="lock-icon">🔒</span>';
-                    button.disabled = true;
-                }
-                
-                buttonsContainer.appendChild(button);
-            }
-        }
-        
-        function startLevel(level) {
-            // Simulate level completion after a short delay
-            setTimeout(function() {
-                // Show level complete screen
-                document.getElementById('completeMessage').textContent = 
-                    `Congratulations! You've completed level ${level}.`;
-                document.getElementById('levelCompleteScreen').style.display = 'flex';
-                
-                // Update progress if this is the highest level completed
-                if (level === playerProgress.highestLevel) {
-                    playerProgress.highestLevel = level + 1;
-                    
-                    // Try to save to localStorage, but don't break if it fails
-                    try {
-                        localStorage.setItem('jatinGamerProgress', JSON.stringify(playerProgress));
-                    } catch (e) {
-                        console.log("Could not save progress to localStorage");
-                    }
-                }
-            }, 1500);
-        }
-        
-        // Continue button handler
-        document.getElementById('continueButton').addEventListener('click', function() {
-            document.getElementById('levelCompleteScreen').style.display = 'none';
-            createLevelButtons(); // Refresh buttons to show newly unlocked levels
-        });
-    </script>
-</body>
+<div class="card hidden" id="loginCard">
+  <h1>Login</h1>
+  <p class="small">Type your registered email to login.</p>
+  <div id="loginMsg" class="small"></div>
+  <input type="email" id="li_email" placeholder="Registered email" />
+  <div class="row">
+    <button id="loginBtn">Login</button>
+    <button class="ghost" id="li_back">Back</button>
+  </div>
+</div>
+
+<div class="card hidden" id="mainCard">
+  <h1 id="mainTitle">Main</h1>
+  <p class="small" id="mainSub">Center option: Enter Activation Code</p>
+  <div style="margin:16px 0" id="activationSection">
+    <button id="enterCode">Enter Activation Code</button>
+  </div>
+  <div id="activationMsg" class="small"></div>
+  <div id="welcomeBox" class="notice hidden"><strong>Welcome to app</strong></div>
+  <div style="margin-top:12px" id="logoutSection">
+    <button class="ghost" id="logout">Logout</button>
+  </div>
+</div>
+
+  </div>  <div class="card hidden" id="infoCard" style="position:fixed;left:20px;top:70px;z-index:40">
+    <h1>Account Info</h1>
+    <p class="small">See your saved account details.</p>
+    <div id="infoContent" class="small"></div>
+    <div style="margin-top:8px" class="row">
+      <button id="closeInfo" class="ghost">Close</button>
+      <button id="adminBtn">Admin</button>
+    </div>
+  </div>  <div class="card hidden" id="adminCard" style="position:fixed;left:20px;top:70px;z-index:50">
+    <h1>Admin -- Add Activation Code</h1>
+    <p class="small">Add a code and link it to a specific App ID. Codes are single-use.</p>
+    <div id="adminMsg" class="small"></div>
+    <input id="adm_code" placeholder="Activation code (e.g. 1826122511)" />
+    <input id="adm_appid" placeholder="Target App ID (10 digits)" />
+    <div class="row">
+      <button id="addCode">Add Code</button>
+      <button class="ghost" id="closeAdmin">Close</button>
+    </div>
+    <div style="margin-top:10px" class="small">Existing codes:</div>
+    <pre id="codesList" class="small" style="max-height:140px;overflow:auto;background:transparent;border:1px dashed rgba(255,255,255,.03);padding:8px;border-radius:8px"></pre>
+  </div>  <script>
+    const qs = s => document.querySelector(s);
+    const rand10 = () => Math.floor(1000000000 + Math.random()*9000000000).toString();
+    const emailValid = em => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+
+    const USERS_KEY = 'offline_app_users_v1';
+    const CODES_KEY = 'offline_app_codes_v1';
+    const CURR_KEY = 'offline_app_current_email_v1';
+
+    function loadUsers(){ try{ return JSON.parse(localStorage.getItem(USERS_KEY)||'[]') }catch(e){return[]} }
+    function saveUsers(u){ localStorage.setItem(USERS_KEY, JSON.stringify(u)) }
+    function loadCodes(){ try{ return JSON.parse(localStorage.getItem(CODES_KEY)||'{}') }catch(e){return{}} }
+    function saveCodes(c){ localStorage.setItem(CODES_KEY, JSON.stringify(c)) }
+
+    const authCard = qs('#authCard');
+    const signupCard = qs('#signupCard');
+    const loginCard = qs('#loginCard');
+    const mainCard = qs('#mainCard');
+    const infoCard = qs('#infoCard');
+    const adminCard = qs('#adminCard');
+
+    function show(el){[authCard,signupCard,loginCard,mainCard,infoCard,adminCard].forEach(x=>x.classList.add('hidden'));el.classList.remove('hidden')}
+
+    qs('#btnSignup').onclick = ()=> show(signupCard);
+    qs('#btnLogin').onclick = ()=> show(loginCard);
+    qs('#su_back').onclick = ()=> show(authCard);
+    qs('#li_back').onclick = ()=> show(authCard);
+
+    qs('#createBtn').onclick = ()=>{
+      const name = qs('#su_name').value.trim();
+      const email = qs('#su_email').value.trim().toLowerCase();
+      const msg = qs('#signupMsg'); msg.textContent = '';
+      if(!name){ msg.textContent='Enter name'; return }
+      if(!emailValid(email)){ msg.textContent='Enter valid email'; return }
+      const users = loadUsers();
+      if(users.find(u=>u.email===email)){ msg.textContent='Already Signed Up with this email'; return }
+      const appId = rand10();
+      const user = {name, email, appId, activated:false, activatedAt:null};
+      users.push(user); saveUsers(users);
+      localStorage.setItem(CURR_KEY, email);
+      openMainFor(user);
+    }
+
+    qs('#loginBtn').onclick = ()=>{
+      const email = qs('#li_email').value.trim().toLowerCase();
+      const msg = qs('#loginMsg'); msg.textContent='';
+      if(!emailValid(email)){ msg.textContent='Enter valid email'; return }
+      const users = loadUsers();
+      const user = users.find(u=>u.email===email);
+      if(!user){ msg.textContent='No account for this email'; return }
+      localStorage.setItem(CURR_KEY, email);
+      openMainFor(user);
+    }
+
+    function openMainFor(user){
+      show(mainCard);
+      qs('#mainTitle').textContent = `Hello, ${user.name}`;
+      qs('#mainSub').textContent = user.activated? 'Activated -- Enjoy the app' : 'Enter Activation Code';
+      qs('#welcomeBox').classList.toggle('hidden', !user.activated);
+      qs('#activationMsg').textContent = '';
+      qs('#activationSection').classList.toggle('hidden', user.activated);
+    }
+
+    qs('#infoBtn').onclick = ()=>{
+      const email = localStorage.getItem(CURR_KEY);
+      if(!email){ alert('No user logged in -- login or signup first.'); return }
+      const users = loadUsers(); const user = users.find(u=>u.email===email);
+      if(!user){ alert('User not found'); return }
+      show(infoCard);
+      qs('#infoContent').innerHTML = `<div><strong>Name:</strong> ${user.name}</div><div><strong>Email:</strong> ${user.email}</div><div><strong>App ID:</strong> ${user.appId}</div><div><strong>Activated:</strong> ${user.activated? 'Yes' : 'No'}</div>`;
+    }
+    qs('#closeInfo').onclick = ()=> show(mainCard);
+
+    qs('#logout').onclick = ()=>{ localStorage.removeItem(CURR_KEY); show(authCard); }
+
+    qs('#enterCode').onclick = ()=>{
+      const code = prompt('Enter activation code:'); if(!code) return;
+      const email = localStorage.getItem(CURR_KEY);
+      if(!email){ alert('No user logged in'); return }
+      const users = loadUsers(); const user = users.find(u=>u.email===email);
+      if(!user){ alert('User not found'); return }
+      const codes = loadCodes();
+      if(!codes[code]){ qs('#activationMsg').textContent = 'Not Active For You'; qs('#activationMsg').className='small bad'; return }
+      const entry = codes[code];
+      if(entry.used){ qs('#activationMsg').textContent = 'This activation code was already used'; qs('#activationMsg').className='small bad'; return }
+      if(entry.appId !== user.appId){ qs('#activationMsg').textContent = 'Not Active For You'; qs('#activationMsg').className='small bad'; return }
+      entry.used = true; entry.usedBy = user.email; entry.usedAt = new Date().toISOString(); codes[code]=entry; saveCodes(codes);
+      user.activated = true; user.activatedAt = new Date().toISOString();
+      const all = loadUsers().map(u=> u.email===user.email?user:u); saveUsers(all);
+      qs('#activationMsg').textContent='Activated! Welcome.'; qs('#activationMsg').className='small ok';
+      qs('#welcomeBox').classList.remove('hidden'); qs('#mainSub').textContent='Activated -- Enjoy the app';
+      qs('#activationSection').classList.add('hidden');
+    }
+
+    qs('#adminBtn').onclick = ()=>{
+      const p = prompt('Enter admin password to add codes:');
+      if(p!== 'admin123'){ alert('Wrong password'); return }
+      show(adminCard); refreshCodesList();
+    }
+    qs('#closeAdmin').onclick = ()=> show(infoCard);
+
+    qs('#addCode').onclick = ()=>{
+      const code = qs('#adm_code').value.trim(); const appid = qs('#adm_appid').value.trim();
+      const msg = qs('#adminMsg'); msg.textContent='';
+      if(!code || !appid){ msg.textContent='Enter both code and App ID'; return }
+      if(!/^\d{10}$/.test(appid)){ msg.textContent='App ID must be 10 digits'; return }
+      const codes = loadCodes();
+      if(codes[code]){ msg.textContent='This activation code already exists'; return }
+      codes[code] = {appId:appid, used:false}; saveCodes(codes);
+      qs('#adm_code').value=''; qs('#adm_appid').value=''; msg.textContent='Added'; refreshCodesList();
+    }
+
+    function refreshCodesList(){ const codes = loadCodes(); let out = '';
+      for(const k in codes){ out += `${k} => AppID:${codes[k].appId} | used:${codes[k].used ? 'yes' : 'no'}\n` }
+      qs('#codesList').textContent = out || 'No codes yet';
+    }
+
+    window.addEventListener('load', ()=>{
+      const cur = localStorage.getItem(CURR_KEY);
+      if(cur){ const users = loadUsers(); const user = users.find(u=>u.email===cur); if(user) openMainFor(user); }
+    });
+  </script></body>
 </html>
